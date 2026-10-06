@@ -73,3 +73,9 @@ class dicom_loader:
     
     def get_image_size(self):
         return self.image_size
+
+    def get_min_pixel(self):
+        return self.pixel_array.min()
+
+    def get_max_pixel(self):
+        return self.pixel_array.max()

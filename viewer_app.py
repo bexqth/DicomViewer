@@ -88,7 +88,9 @@ class viewer_app:
             "ID: " + str(loader.get_patient_id()),
             "Modality: " + str(loader.get_modality()),
             "Date: " + str(loader.get_study_date()),
-            "Size: " + str(loader.get_image_size())
+            "Size: " + str(loader.get_image_size()),
+            "Min pixel " + str(loader.get_min_pixel()),
+            "Max pixel " + str(loader.get_max_pixel()),
         ]
         self.info_panel.update_info(info)
         self.update_index_label()

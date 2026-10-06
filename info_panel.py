@@ -16,14 +16,14 @@ class info_panel(Frame):
     def create_labels(self):
         title_label = Label(self, text="Patient Information", 
                            bg=self.cget("bg"), fg="white",
-                           font=("Segoe UI", 18, "bold"))  # Zväčšené písmo
+                           font=("Segoe UI", 18, "bold"))
         title_label.grid(row=0, column=0, sticky="w", padx=15, pady=(15, 20))
      
-        names = ["Patient Name", "Patient ID", "Modality", "Study Date", "Image Size"]
+        names = ["Patient Name", "Patient ID", "Modality", "Study Date", "Image Size", "Min pix", "Max pix"]
         for i in range(len(names)):
             label = Label(self, text=names[i] + ": --", 
                          bg=self.cget("bg"), fg=self.text_color,
-                         font=("Segoe UI", 12),  # Zväčšené písmo
+                         font=("Segoe UI", 12),
                          anchor="w", wraplength=230) 
             self.labels.append(label)
 
