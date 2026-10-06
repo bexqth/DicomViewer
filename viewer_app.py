@@ -2,6 +2,7 @@ from tkinter import Tk, Frame, Button, filedialog, PhotoImage, Label
 from dicom_loader import dicom_loader
 from image_panel import image_panel
 from info_panel import info_panel
+import matplotlib.pyplot as plt
 
 class viewer_app:
 
@@ -49,6 +50,7 @@ class viewer_app:
             self.dicom_files.sort()
             self.current_index = 0
             self.display_current_image()
+            self.print_dictionary()
 
     def set_layout(self):
         self.button_frame = Frame(self.window, bg=self.primary_color, height=45)
@@ -69,14 +71,17 @@ class viewer_app:
         self.window.update_idletasks()
 
     def display_current_image(self):
-        if len(self.dicom_files) == 0 or self.current_index < 0:
-            return
         loader = self.loaders[self.current_index]
         
         self.window.update_idletasks()
         width = self.data_frame.winfo_width()
         height = self.data_frame.winfo_height()
         self.image_panel.display_dicom_image(loader.image, width, height)
+
+        #matplotlib
+        plt.imshow(loader.pixel_array, cmap="gray")
+        plt.title(f"DICOM {self.current_index + 1}")
+        plt.show()
 
         info = [
             "Name: " + str(loader.get_patient_name()),
@@ -88,20 +93,31 @@ class viewer_app:
         self.info_panel.update_info(info)
         self.update_index_label()
 
+    def print_dictionary(self):
+        i = 1
+        for dicom in self.loaders:
+            print(f"\n--- DICOM {i} ---")
+            dicom.print_metadata(dicom.get_metadata())
+            i = i + 1
+
     def update_index_label(self):
         if len(self.dicom_files) > 0:
-            self.index_label.config(text=f"Fotka {self.current_index + 1} / {len(self.dicom_files)}")
+            self.index_label.config(text=f"Pic: {self.current_index + 1} / {len(self.dicom_files)}")
         else:
             self.index_label.config(text="No pictures")
 
     def next_image(self):
         if self.current_index < len(self.dicom_files) - 1:
             self.current_index += 1
+            if self.current_index >= len(self.dicom_files):
+                self.current_index = 0
             self.display_current_image()
 
     def prev_image(self):
         if self.current_index > 0:
             self.current_index -= 1
+            if self.current_index < 0:
+                self.current_index = len(self.dicom_files) - 1
             self.display_current_image()
 
     def set_buttons(self):
@@ -127,7 +143,7 @@ class viewer_app:
         self.next_button.pack(side="left", padx=5, pady=8)
 
         self.index_label = Label(self.button_frame, 
-                                  text="Žiadne fotky", 
+                                  text="No pictures", 
                                   bg=self.primary_color, 
                                   fg="white",
                                   font=("Segoe UI", 10))

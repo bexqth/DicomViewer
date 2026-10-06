@@ -15,6 +15,7 @@ class dicom_loader:
         self.study_date = ""
         self.image_size = ""
 
+
     def open_file(self):
         pass
 
@@ -24,7 +25,7 @@ class dicom_loader:
         self.image = Image.fromarray(self.pixel_array)
 
     def set_patient_info(self):
-        self.patient_name = self.dataset.PatientName 
+        self.patient_name = self.dataset.PatientName
         self.patient_id = self.dataset.PatientID
         self.modality = self.dataset.Modality
         date_str = str(self.dataset.StudyDate)
@@ -36,6 +37,24 @@ class dicom_loader:
         else:
             self.study_date = date_str 
         self.image_size =  f"{self.dataset.Rows} x {self.dataset.Columns}"
+
+    def get_metadata(self):
+        metadata = list()
+        metadata.append("PatientSex:" + self.dataset.PatientSex)
+        metadata.append("PatientAge:" + self.dataset.PatientAge)
+        metadata.append("PatientPosition:" + self.dataset.PatientPosition)
+        metadata.append("Modality:" + self.dataset.Modality)
+        metadata.append("Manufacturer:" + self.dataset.Manufacturer)
+        metadata.append("StudyDescription:" + self.dataset.StudyDescription)
+        metadata.append("ProtocolName:" + self.dataset.ProtocolName)
+        return metadata
+
+    def print_metadata(self, metadata):
+        for data in metadata:
+            print(data)
+
+    def get_patient_info(self):
+        return self.patient_name
 
     def get_tk_image(self):
         return self.tk_image
